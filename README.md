@@ -21,3 +21,8 @@ The data has been restored as .csv file.
 
 -   File: [raw_classification.py](./raw_classification.py);
 -   Method: Classification using SVC using all 120 channels as features.
+
+### Visualization
+
+-   File: [visualization.py](./visualization.py)
+-   Method: Generate data visualization for the events and channels.

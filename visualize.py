@@ -8,9 +8,9 @@ import plotly.express as px
 from tqdm.auto import tqdm
 
 # %%
+data_folder = os.path.join(os.path.dirname(__file__), '..', 'data')
 channel_names = ['ax', 'ay', 'az', 'gx', 'gy', 'gz']
-folder = os.path.join(os.environ['WorkingFolder'],
-                      'MotionAnalysis')
+folder = data_folder
 path = os.path.join(folder,
                     '处理后的数据(200ms)(6个人).csv')
 
