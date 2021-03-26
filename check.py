@@ -1,5 +1,6 @@
 # %%
 import os
+import numpy as np
 import pandas as pd
 import plotly.express as px
 
@@ -8,25 +9,23 @@ from tqdm.auto import tqdm
 from sklearn import metrics
 
 # %%
-folder = os.path.join(os.environ['WorkingFolder'],
-                      'MotionAnalysis')
+folder = os.path.join(os.path.dirname(__file__), '..', 'data')
 
 # %%
-dfs = []
-for f in os.listdir(folder):
-    if f.endswith('.csv') and f.startswith('raw_classification_results'):
-        print(f)
-        dfs.append(pd.read_csv(os.path.join(folder, f)))
+df = pd.read_csv(os.path.join(folder, 'raw_classification_results.csv'))
+df['predictCNN'] = np.load(os.path.join(folder, 'cnn_predict.npy'))
 
-dfs
+label = df['label']
+predsvm = df['predict']
+predcnn = df['predictCNN']
 
-# %%
-for df in dfs:
-    label = df['label']
-    predict = df['predict']
-    print(metrics.classification_report(label, predict))
-    cm = metrics.confusion_matrix(label, predict, normalize='true')
-    fig = px.imshow(cm)
-    fig.show()
+print(metrics.classification_report(label, predsvm))
+cm = metrics.confusion_matrix(label, predsvm, normalize='true')
+fig = px.imshow(cm)
+fig.show()
 
+print(metrics.classification_report(label, predcnn))
+cm = metrics.confusion_matrix(label, predcnn, normalize='true')
+fig = px.imshow(cm)
+fig.show()
 # %%
