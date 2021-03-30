@@ -69,7 +69,7 @@ for c in channel_names:
     # fig.show()
     html = html.replace(f'{{{{{c}}}}}',
                         fig.to_html(full_html=False,
-                                    include_plotlyjs=include_plotlyjs).replace('div', 'div class="subplot"', 1))
+                                    include_plotlyjs=include_plotlyjs))
     include_plotlyjs = False
 
 with open(os.path.join(folder, 'waveform.html'), 'w') as f:
