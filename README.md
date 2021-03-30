@@ -39,3 +39,9 @@ The data has been restored as .csv file.
 - Detail: The 120 channels are of 20 times x 6 channels.
   The method is computing the covariance across channels.
   The results turn no improve.
+
+### SVM Generation and Channel Classification
+
+- Files: [svm_channels.py](./svm_channels.py), [svm_channels_check.py](./svm_channels_check.py), [svm_generation.py](./svm_channels.py), [svm_generation_check.py](./svm_channels_check.py)
+- Aim: To find out whether there are time or channel selection, we perform time generation and channel selection performance.
+- Results: It turns out the time point and channel selection is not doing well in classification analysis.
