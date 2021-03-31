@@ -35,8 +35,8 @@ The data has been restored as .csv file.
 ### SVM Raw Cov Classification
 
 - File: [svm_raw_cov.py](./svm_raw_cov.py)
-- Method: Classification using SVC using all 120 channels and cov features across channels.
-- Detail: The 120 channels are of 20 times x 6 channels.
+- Method: Classification using SVC using all 120 features and cov features across channels.
+- Detail: The 120 features are of 20 times x 6 channels.
   The method is computing the covariance across channels.
   The results turn no improve.
 
@@ -50,3 +50,12 @@ The data has been restored as .csv file.
 
 - File: [view.py](./view3d/view.py)
 - Method: Plot the animation in plotly.
+
+### SVM with Accumulate Feature
+
+- File: [svm_accumulate.py](./svm_accumulate.py)
+- Method: A trying to use the accumulated feature,
+  where the features in 20 times are accumulated one-by-one.
+  The aim is to reduce the noise during the 20 times.
+- Result: It turns out the accumulation method is reducing the classification accuracy.
+  It is another failed trying.
