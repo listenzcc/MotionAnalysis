@@ -19,11 +19,13 @@ label = df['label']
 predsvm = df['predict']
 predcnn = df['predictCNN']
 
+print('SVM')
 print(metrics.classification_report(label, predsvm))
 cm = metrics.confusion_matrix(label, predsvm, normalize='true')
 fig = px.imshow(cm)
 fig.show()
 
+print('CNN')
 print(metrics.classification_report(label, predcnn))
 cm = metrics.confusion_matrix(label, predcnn, normalize='true')
 fig = px.imshow(cm)
