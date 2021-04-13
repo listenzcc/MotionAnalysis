@@ -59,3 +59,9 @@ The data has been restored as .csv file.
   The aim is to reduce the noise during the 20 times.
 - Result: It turns out the accumulation method is reducing the classification accuracy.
   It is another failed trying.
+
+### TSNE Visualization
+
+- File: [view_tsne.py](./view_tsne.py)
+- Method: Use TSNE to project the 120 dimensional data into 2 dimensional space.
+- Result: It shows some events are easier to be classified, like 6 and 9, others are confused.
