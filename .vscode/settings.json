@@ -1,6 +1,12 @@
 {
     "cSpell.words": [
+        "astype",
         "plotlyjs",
-        "tsne"
-    ]
+        "tsne",
+        "xanchor",
+        "xaxis",
+        "yanchor",
+        "yaxis"
+    ],
+    "python.pythonPath": "C:\\Users\\zcc\\anaconda3\\python.exe"
 }
