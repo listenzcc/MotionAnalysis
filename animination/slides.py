@@ -14,7 +14,7 @@ setting = dict(
     color=['hsl(0, 100%, 50%)', 'hsl(70, 100%, 50%)', 'hsl(130, 100%, 50%)'],
     x_range=(10, 80),
     y_range=(10, 20),
-    num=10,
+    num_range=(10, 20),
     num_frames=20,
 )
 
@@ -25,15 +25,20 @@ np.random.choice([1, 2, 3])
 # Make frames
 frame_df = []
 
-for j in tqdm(range(setting['num_frames'])):
 
+def random(rge):
+    bot, top = rge
+    return np.random.randint(bot, top)
+
+
+for j in tqdm(range(setting['num_frames'])):
     df = pd.DataFrame()
-    df['x'] = [np.random.randint(setting['x_range'][0], setting['x_range'][1])
-               for _ in range(setting['num'])]
-    df['y'] = [np.random.randint(setting['y_range'][0], setting['y_range'][1])
-               for _ in range(setting['num'])]
-    df['color'] = np.random.choice(setting['color'], setting['num'])
-    df['size'] = np.random.choice(setting['size'], setting['num'])
+
+    num = random(setting['num_range'])
+    df['x'] = [random(setting['x_range']) for _ in range(num)]
+    df['y'] = [random(setting['y_range']) for _ in range(num)]
+    df['color'] = np.random.choice(setting['color'], num)
+    df['size'] = np.random.choice(setting['size'], num)
     df['name'] = f'Frame-{j:02d}'
 
     frame_df.append(df)
