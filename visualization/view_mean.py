@@ -8,8 +8,9 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
 # %%
-pwd = os.path.dirname(__file__)
-data_folder = os.path.join(pwd, '..', '..', 'data')
+# pwd = os.path.dirname(__file__)
+# data_folder = os.path.join(pwd, '..', '..', 'data')
+data_folder = r'H:\Sync\MotionData\data'
 
 # Data_3d shape is (31625, 20, 6),
 #                   samples x times x channels
@@ -19,7 +20,8 @@ event = np.load(os.path.join(data_folder, 'event.npy'))
 
 channel_name = ['ax', 'ay', 'az', 'gx', 'gy', 'gz']
 event_idx = list(np.unique(event))
-event_name = ['SLW', 'MLW', 'FLW', 'RD', 'SD', 'sit', 'stand', 'RA', 'SA']
+event_name = ['0-SLW', '1-MLW', '2-FLW', '3-RD',
+              '4-SD', '5-sit', '6-stand', '7-RA', '8-SA']
 
 data_3d.shape, event.shape
 
@@ -90,7 +92,8 @@ d.shape, dp.shape
 
 df['x'] = dp[:, 0]
 df['y'] = dp[:, 1]
-fig = px.scatter(df, x='x', y='y', color='event', size='k')
+fig = px.scatter(df, x='x', y='y', color='event', size='k', opacity=0.4)
 fig.show()
+fig.write_html('TSNE.html')
 
 # %%
