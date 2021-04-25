@@ -24,8 +24,6 @@ event_name = {
     '8-SA': 9,
 }
 folder_path = r'H:\Sync\MotionData\data\motions'
-folder_path = os.path.join(
-    os.environ['HOME'], r'Downloads\sync-20210423\MotionData\data\motions')
 
 
 # %%
@@ -113,41 +111,29 @@ for train_idx, test_idx in skf.split(Y_raw, Y_raw):
     clf.fit(X_train, y_train)
 
     # Fit on Steps
-    X_train, y_train, clf_67_, clf_67 = fit_clf(X_train, y_train, [6, 7])
-    # X_train, y_train, clf_1234589_, clf_1234589 = fit_clf(
-    #     X_train, y_train, [1, 2, 3, 4, 5, 8, 9])
-    X_train, y_train, clf_59_, clf_59 = fit_clf(X_train, y_train, [5, 9])
-    X_train, y_train, clf_12348_, clf_12348 = fit_clf(
-        X_train, y_train, [1, 2, 3, 4, 8])
-    # X_train, y_train, clf_48_, clf_48 = fit_clf(X_train, y_train, [4, 8])
-    # X_train, y_train, clf_123_, clf_123 = fit_clf(X_train, y_train, [1, 2, 3])
+    X_train, y_train, clf_67_o, clf_67 = fit_clf(X_train, y_train, [6, 7])
+    X_train, y_train, clf_123_o, clf_123 = fit_clf(X_train, y_train, [1, 2, 3])
+    X_train, y_train, _, clf_4589 = fit_clf(X_train, y_train, [4, 5, 8, 9])
     print(X_train.shape, y_train.shape)
 
     break
-
-# %%
-y_pred = clf_67_.predict(X_test)
-y_pred[y_pred == 100] = clf_67.predict(X_test[y_pred == 100])
-
-# y_pred[y_pred == 200] = clf.predict(X_test[y_pred == 200])
-
-y_pred[y_pred == 200] = clf_59_.predict(X_test[y_pred == 200])
-y_pred[y_pred == 100] = clf_59.predict(X_test[y_pred == 100])
-
-# y_pred[y_pred == 200] = clf_48_.predict(X_test[y_pred == 200])
-# y_pred[y_pred == 100] = clf_48.predict(X_test[y_pred == 100])
-
-# y_pred[y_pred == 200] = clf_123.predict(X_test[y_pred == 200])
-y_pred[y_pred == 200] = clf_12348.predict(X_test[y_pred == 200])
-
-print(np.unique(np.unique(y_pred)))
-print(metrics.classification_report(y_true=y_test, y_pred=y_pred))
-print(metrics.confusion_matrix(y_true=y_test, y_pred=y_pred))
 
 # %%
 y_pred = clf.predict(X_test)
 print(np.unique(np.unique(y_pred)))
 print(metrics.classification_report(y_true=y_test, y_pred=y_pred))
 print(metrics.confusion_matrix(y_true=y_test, y_pred=y_pred))
+
+# %%
+y_pred = clf_67_o.predict(X_test)
+y_pred[y_pred == 100] = clf_67.predict(X_test[y_pred == 100])
+y_pred[y_pred == 200] = clf_123_o.predict(X_test[y_pred == 200])
+y_pred[y_pred == 100] = clf_123.predict(X_test[y_pred == 100])
+y_pred[y_pred == 200] = clf.predict(X_test[y_pred == 200])
+
+print(np.unique(np.unique(y_pred)))
+print(metrics.classification_report(y_true=y_test, y_pred=y_pred))
+print(metrics.confusion_matrix(y_true=y_test, y_pred=y_pred))
+
 
 # %%

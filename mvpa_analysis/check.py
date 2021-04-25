@@ -25,7 +25,7 @@ print(metrics.classification_report(label, predsvm))
 cm = metrics.confusion_matrix(label, predsvm, normalize='true')
 fig = px.imshow(cm)
 fig.show()
-fig.write_html('svm_confuse.html')
+# fig.write_html('svm_confuse.html')
 
 print('CNN')
 print(metrics.classification_report(label, predcnn))
@@ -35,5 +35,5 @@ fig.show()
 # %%
 df = pd.DataFrame(metrics.classification_report(
     label, predsvm, output_dict=True)).T
-df.to_csv('accuracy.csv')
+# df.to_csv('accuracy.csv')
 # %%
