@@ -206,86 +206,6 @@ def plot_trace(e, dd, vec=vec, camera=camera):
     return fig
 
 
-def plot_animation(e, dd, vec=vec, camera=camera):
-    trace = Trace(vec, color=rgb(0))
-
-    for i, d in enumerate(dd):
-        trace.add(pos_diff=d[:3], rot_diff=d[3:], color=rgb(i))
-
-    trace.df
-
-    range_x = (trace.df['x'].min(), trace.df['x'].max())
-    range_y = (trace.df['y'].min(), trace.df['y'].max())
-    range_z = (trace.df['z'].min(), trace.df['z'].max())
-
-    df1 = trace.df.copy()
-    df1['line_group'] = 'a'
-
-    # Add Grids
-    dfx = trace.df.copy()
-    dfx['line_group'] = 'g'
-
-    dfy = trace.df.copy()
-    dfy['line_group'] = 'g'
-
-    dfz = trace.df.copy()
-    dfz['line_group'] = 'g'
-
-    # x-axis
-    xyz = dfx[['x', 'y', 'z']].values
-    for j in range(len(xyz)):
-        if j % 2 == 0:
-            xyz[j] = [range_x[0], range_y[1], range_z[1]]
-        if j % 2 == 1:
-            xyz[j] = [range_x[1], range_y[1], range_z[1]]
-    dfx[['x', 'y', 'z']] = xyz
-
-    # y-axis
-    xyz = dfy[['x', 'y', 'z']].values
-    for j in range(len(xyz)):
-        if j % 2 == 0:
-            xyz[j] = [range_x[0], range_y[1], range_z[1]]
-        if j % 2 == 1:
-            xyz[j] = [range_x[0], range_y[0], range_z[1]]
-    dfy[['x', 'y', 'z']] = xyz
-
-    # z-axis
-    xyz = dfz[['x', 'y', 'z']].values
-    for j in range(len(xyz)):
-        if j % 2 == 0:
-            xyz[j] = [range_x[0], range_y[1], range_z[1]]
-        if j % 2 == 1:
-            xyz[j] = [range_x[0], range_y[1], range_z[0]]
-    dfz[['x', 'y', 'z']] = xyz
-
-    df = pd.concat([df1, dfx, dfy, dfz], axis=0)
-
-    kwargs = dict(
-        width=800,
-        height=800,
-        title=e
-    )
-
-    fig = px.line_3d(df, x='x', y='y', z='z', line_group='line_group',
-                     color='color', animation_frame='step', **kwargs)
-
-    for f in fig.frames:
-        f.data[0].name = 'x'
-        # f.data[1].name = '--'
-        pass
-
-    for j, frame in enumerate(fig.frames):
-        frame['data'][0]['line']['color'] = df.iloc[j*2]['color']
-        frame['data'][0]['line']['width'] = 5
-        frame['data'][1]['line']['color'] = 'black'
-
-    fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 20
-    fig.update_layout(scene_camera=camera)
-    fig.write_html(f'{e}.html')
-
-    return fig, trace.df
-
-
 # %%
 app = dash.Dash(__name__)
 folder = r'H:\Sync\MotionData\data\motions'
@@ -327,7 +247,6 @@ def update_output(name):
     mean_data = np.mean(data, axis=0)
     print(mean_data.shape)
 
-    fig, _ = plot_animation(name, mean_data)
     fig = plot_trace(name, mean_data)
 
     return fig
