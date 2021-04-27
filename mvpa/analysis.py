@@ -23,7 +23,8 @@ event_name = {
     '7-RA': 8,
     '8-SA': 9,
 }
-folder_path = r'H:\Sync\MotionData\data\motions'
+
+folder_path = os.path.join(os.environ['SYNC'], 'MotionData\\data\\motions')
 
 
 # %%
@@ -135,5 +136,14 @@ print(np.unique(np.unique(y_pred)))
 print(metrics.classification_report(y_true=y_test, y_pred=y_pred))
 print(metrics.confusion_matrix(y_true=y_test, y_pred=y_pred))
 
+
+# %%
+y_pred = clf_67_o.predict(X_test)
+y_pred[y_pred == 100] = clf_67.predict(X_test[y_pred == 100])
+y_pred[y_pred == 200] = clf.predict(X_test[y_pred == 200])
+
+print(np.unique(np.unique(y_pred)))
+print(metrics.classification_report(y_true=y_test, y_pred=y_pred))
+print(metrics.confusion_matrix(y_true=y_test, y_pred=y_pred))
 
 # %%
