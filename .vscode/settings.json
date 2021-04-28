@@ -1,6 +1,12 @@
 {
     "cSpell.words": [
+        "Chuncheng",
+        "Zhang",
         "astype",
+        "isfile",
+        "isinstance",
+        "kwargs",
+        "matmul",
         "objs",
         "plotly",
         "plotlyjs",
