@@ -1,3 +1,21 @@
+# Manual of Motion Analysis Software
+
+- [Manual of Motion Analysis Software](#manual-of-motion-analysis-software)
+- [Parse Raw Data](#parse-raw-data)
+  - [Information](#information)
+  - [Data Description](#data-description)
+  - [Analysis](#analysis)
+    - [Parse](#parse)
+    - [Visualize](#visualize)
+- [Parse Motion Events](#parse-motion-events)
+  - [Information](#information-1)
+  - [Dependency](#dependency)
+  - [Analysis](#analysis-1)
+  - [From Raw Data to Rod Moving](#from-raw-data-to-rod-moving)
+- [Establish Dash App](#establish-dash-app)
+  - [Information](#information-2)
+  - [Script Function](#script-function)
+
 # Parse Raw Data
 
 ## Information
@@ -54,3 +72,73 @@ The projected 2D features and the plot will be saved when the script is operated
 
 - The 2D features data will be saved as "TSNE Plot.csv";
 - The Plot will be saved as "TSNE Plot.html".
+
+# Parse Motion Events
+
+## Information
+
+- FileName: parse_motion.py
+- Author: Chuncheng Zhang
+- Date: 2021-04-27
+
+## Dependency
+
+The script is designed to be operated **AFTER** running the script of "parse_raw_data.py".
+It will use the data of the 9 motion events.
+
+- 1-SLW: Slow-speed Level Walking;
+- 2-MLW: Medium-speed Level Walking;
+- 3-FLW: Fast-speed Level Walking;
+- 4-RD: Ramp Descending;
+- 5-SD: Stair Descending;
+- 6-sit: Sitting Down;
+- 7-stand: Standing Up;
+- 8-RA: Ramp Ascending;
+- 9-SA: Stair Ascending.
+
+## Analysis
+
+The script will generate the trace and the animation of the motion events.
+
+The trace is the static plotting of the rod in moving;
+The animation is the animation of the rod in moving.
+
+## From Raw Data to Rod Moving
+
+The raw data signal is the 6 channels signal,
+they are the differential position in x-, y- and z-axis, and the differential angle in the three axis.
+In one sentence, the raw data is the 1st differential of the rigid body transformation.
+
+We developed the class of Trace,
+to translate the 1st differential signal into accumulated rod positions which is the true motion.
+
+The Trace contains the computation of the necessary matrix.
+The users need only to add the 6D raw signal one by one,
+it will automatically generate the moving trace of the rod.
+
+The trace will be stored in the DataFrame of pandas.
+The time points are two-rows pair (start and end points) in the DataFrame,
+the columns are ['x', 'y', 'z', 'color', 'step'].
+
+The trace and animation plotting are drawn based on the DataFrame.
+And the plots are automatically saved separated by motion events to the .html files.
+
+# Establish Dash App
+
+## Information
+
+- FileName: index.py
+- Author: Chuncheng Zhang
+- Date: 2021-04-27
+
+## Script Function
+
+The Index App for Visualize the Motion Trace.
+
+The script will establish the web server,
+the user can use it as the common web application.
+The web server is established using the dash app.
+
+The app is an interactive application,
+the user can choose the motion event to be visualized,
+the user can also watch the motion animation in one-by-one frame manner.
