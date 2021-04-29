@@ -1,53 +1,26 @@
+
 '''
-# Parse Motion Events
+# Establish Dash App
 
 ## Information
 
-- FileName: parse_motion.py
+- FileName: index.py
 - Author: Chuncheng Zhang
 - Date: 2021-04-27
 
-## Dependency
+## Script Function
 
-The script is designed to be operated **AFTER** running the script of "parse_raw_data.py".
-It will use the data of the 9 motion events.
-- 1-SLW: Slow-speed Level Walking;
-- 2-MLW: Medium-speed Level Walking;
-- 3-FLW: Fast-speed Level Walking;
-- 4-RD: Ramp Descending;
-- 5-SD: Stair Descending;
-- 6-sit: Sitting Down;
-- 7-stand: Standing Up;
-- 8-RA: Ramp Ascending;
-- 9-SA: Stair Ascending.
+The Index App for Visualize the Motion Trace.
 
-## Analysis
+The script will establish the web server,
+the user can use it as the common web application.
+The web server is established using the dash app.
 
-The script will generate the trace and the animation of the motion events.
-
-The trace is the static plotting of the rod in moving;
-The animation is the animation of the rod in moving.
-
-## From Raw Data to Rod Moving
-
-The raw data signal is the 6 channels signal,
-they are the differential position in x-, y- and z-axis, and the differential angle in the three axis.
-In one sentence, the raw data is the 1st differential of the rigid body transformation.
-
-We developed the class of Trace,
-to translate the 1st differential signal into accumulated rod positions which is the true motion.
-
-The Trace contains the computation of the necessary matrix.
-The users need only to add the 6D raw signal one by one,
-it will automatically generate the moving trace of the rod.
-
-The trace will be stored in the DataFrame of pandas.
-The time points are two-rows pair (start and end points) in the DataFrame,
-the columns are ['x', 'y', 'z', 'color', 'step'].
-
-The trace and animation plotting are drawn based on the DataFrame.
-And the plots are automatically saved separated by motion events to the .html files.
+The app is an interactive application,
+the user can choose the motion event to be visualized,
+the user can also watch the motion animation in one-by-one frame manner.
 '''
+
 # %%
 import os
 
@@ -57,6 +30,11 @@ import plotly.express as px
 
 import matplotlib
 import matplotlib.pyplot as plt
+
+import dash
+import dash_html_components as html
+import dash_core_components as dcc
+from dash.dependencies import Input, Output
 
 # %%
 event_name = {
@@ -70,6 +48,7 @@ event_name = {
     "8-RA": 8,
     "9-SA": 9,
 }
+default_name = [e for e in event_name][0]
 
 # %%
 folder = os.path.join(os.environ['Sync'], 'MotionData', 'dataFolder')
@@ -299,9 +278,9 @@ length = 10
 vec = [-length, 0, 0]
 
 
-def plot_animation(e, dd, vec=vec):
+def plot_trace(e, dd, vec=vec):
     '''
-    Plot the animation based on the data [dd] for the motion event [e].
+    Plot the trace based on the data [dd] for the motion event [e].
     The trace of the motion is computed,
     and the motion is drawn in animation.
 
@@ -338,34 +317,35 @@ def plot_animation(e, dd, vec=vec):
     dfz = trace.df.copy()
     dfz['line_group'] = 'g'
 
-    # x-axis
-    xyz = dfx[['x', 'y', 'z']].values
-    for j in range(len(xyz)):
-        if j % 2 == 0:
-            xyz[j] = [range_x[0], range_y[1], range_z[1]]
-        if j % 2 == 1:
-            xyz[j] = [range_x[1], range_y[1], range_z[1]]
-    dfx[['x', 'y', 'z']] = xyz
+    # # x-axis
+    # xyz = dfx[['x', 'y', 'z']].values
+    # for j in range(len(xyz)):
+    #     if j % 2 == 0:
+    #         xyz[j] = [range_x[0], range_y[1], range_z[1]]
+    #     if j % 2 == 1:
+    #         xyz[j] = [range_x[1], range_y[1], range_z[1]]
+    # dfx[['x', 'y', 'z']] = xyz
 
-    # y-axis
-    xyz = dfy[['x', 'y', 'z']].values
-    for j in range(len(xyz)):
-        if j % 2 == 0:
-            xyz[j] = [range_x[0], range_y[1], range_z[1]]
-        if j % 2 == 1:
-            xyz[j] = [range_x[0], range_y[0], range_z[1]]
-    dfy[['x', 'y', 'z']] = xyz
+    # # y-axis
+    # xyz = dfy[['x', 'y', 'z']].values
+    # for j in range(len(xyz)):
+    #     if j % 2 == 0:
+    #         xyz[j] = [range_x[0], range_y[1], range_z[1]]
+    #     if j % 2 == 1:
+    #         xyz[j] = [range_x[0], range_y[0], range_z[1]]
+    # dfy[['x', 'y', 'z']] = xyz
 
-    # z-axis
-    xyz = dfz[['x', 'y', 'z']].values
-    for j in range(len(xyz)):
-        if j % 2 == 0:
-            xyz[j] = [range_x[0], range_y[1], range_z[1]]
-        if j % 2 == 1:
-            xyz[j] = [range_x[0], range_y[1], range_z[0]]
-    dfz[['x', 'y', 'z']] = xyz
+    # # z-axis
+    # xyz = dfz[['x', 'y', 'z']].values
+    # for j in range(len(xyz)):
+    #     if j % 2 == 0:
+    #         xyz[j] = [range_x[0], range_y[1], range_z[1]]
+    #     if j % 2 == 1:
+    #         xyz[j] = [range_x[0], range_y[1], range_z[0]]
+    # dfz[['x', 'y', 'z']] = xyz
 
-    df = pd.concat([df1, dfx, dfy, dfz], axis=0)
+    # df = pd.concat([df1, dfx, dfy, dfz], axis=0)
+    df = df1.copy()
 
     kwargs = dict(
         width=800,
@@ -374,48 +354,155 @@ def plot_animation(e, dd, vec=vec):
     )
 
     fig = px.line_3d(df, x='x', y='y', z='z', line_group='line_group',
-                     color='color', animation_frame='step', **kwargs)
+                     color='color', **kwargs)
 
-    fig_s = px.line_3d(df, x='x', y='y', z='z', line_group='line_group',
-                       color='color', **kwargs)
-
-    for f in fig.frames:
-        f.data[0].name = 'x'
-
-    for j, frame in enumerate(fig.frames):
-        frame['data'][0]['line']['color'] = df.iloc[j*2]['color']
-        frame['data'][0]['line']['width'] = 5
-        frame['data'][1]['line']['color'] = 'black'
-
-    for j, d in enumerate(fig_s.data):
+    for j, d in enumerate(fig.data):
         d['line']['color'] = df.iloc[j*2]['color']
 
-    fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 20
-
-    return fig, fig_s, trace.df
+    return fig, trace.df
 
 
 # %%
 '''
-Draw the animation plot
+Set up the camera parameters,
+- @up: The up direction of the fig;
+- @center: The center position of the fig;
+- @eye: The eys position of the observer.
 '''
+
 camera = dict(
     up=dict(x=1, y=0, z=0),
     center=dict(x=0, y=0, z=0),
     eye=dict(x=0, y=-2, z=0)
 )
 
-for name in event_name:
-    print(name)
 
-    d = np.load(generate_path(f'{name}.npy'))
-    md = np.mean(d, axis=0)
-    print(name, d.shape, md.shape)
+class MyFigure(object):
+    '''
+    The Figure Manager.
+    The purpose of the object is to build a container for the figure,
+    it can maintain the figure for the useage of the dash app,
+    the manager can make the figure changeable,
+    it is essential to build the interactive app.
+    '''
 
-    fig, fig_s, _ = plot_animation(name, md)
-    fig.update_layout(scene_camera=camera)
-    fig_s.update_layout(scene_camera=camera)
-    save(fig.write_html, generate_path(f'{name}.html'))
-    save(fig_s.write_html, generate_path(f'{name}_stable.html'))
+    def __init__(self, name):
+        '''
+        Initialize the object by the motion name [name].
+
+        Args:
+        - @name: The motion name of interest.
+        '''
+        self.update_fig(name)
+
+    def update_fig(self, name):
+        '''
+        Update the figure by the motion name [name].
+
+        Args:
+        - @name: The motion name of interest.
+
+        Outputs:
+        - @fig: The generated figure.
+        '''
+        d = np.load(generate_path(f'{name}.npy'))
+        md = np.mean(d, axis=0)
+        fig, _ = plot_trace(name, md)
+        fig.update_layout(scene_camera=camera)
+        self.fig = fig
+        self.step = 0
+        print(f'I: Changed figure to the motion of "{name}"')
+        return fig
+
+    def forward(self):
+        '''
+        Move forward the step to the current figure.
+
+        Outputs:
+        - @fig: The current figure.
+        '''
+        n = len(self.fig.data)
+
+        for d in self.fig.data:
+            d['line']['width'] = 5
+        d = self.fig.data[self.step]
+
+        d['line']['width'] = 20
+
+        self.step += 1
+        self.step %= n
+
+        print(f'D: Changed step into "{self.step}"')
+        return self.fig
+
+
+# Init the MyFigure instance
+myfig = MyFigure(default_name)
 
 # %%
+'''
+Generate and Layout the Dash App
+'''
+# Main App Instance
+app = dash.Dash(__name__)
+
+# Component Style Parameters
+style = {'width': '100%', 'display': 'inline-block'}
+
+# Setup App Layout
+app.layout = html.Div(
+    [
+        # Motion Event Selector
+        html.Div(
+            [
+                dcc.Dropdown(
+                    id='dropdown-1',
+                    options=[{'label': e, 'value': e} for e in event_name],
+                    value=default_name,
+                )
+            ],
+            style=style
+        ),
+        # Main Graph
+        html.Div(
+            [
+                dcc.Graph(id='graph-1', figure=myfig.fig)
+            ],
+            style=style
+        ),
+        # Button Container
+        html.Div(
+            [
+                html.Button('Forward', id='button-1', n_clicks=0)
+            ],
+            style=style
+        ),
+    ]
+)
+
+
+# Setup callback for the dropdown menu and button
+@app.callback(
+    Output(component_id='graph-1', component_property='figure'),
+    [
+        Input(component_id='dropdown-1', component_property='value'),
+        Input(component_id='button-1', component_property='n_clicks'),
+    ]
+)
+def update_graph1(name, n_clicks1):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    print(f'D: Component: "{changed_id}" changed.')
+
+    if changed_id.startswith('dropdown-1'):
+        myfig.update_fig(name)
+
+    if changed_id.startswith('button-1'):
+        myfig.forward()
+
+    return myfig.fig
+
+
+# %%
+# Start up the App on running the Script
+if __name__ == '__main__':
+    app.run_server(debug=True, port=8080)
