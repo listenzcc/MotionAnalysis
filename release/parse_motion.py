@@ -367,6 +367,8 @@ def plot_animation(e, dd, vec=vec):
 
     df = pd.concat([df1, dfx, dfy, dfz], axis=0)
 
+    # df = df1.copy()
+
     kwargs = dict(
         width=800,
         height=800,
@@ -379,16 +381,20 @@ def plot_animation(e, dd, vec=vec):
     fig_s = px.line_3d(df, x='x', y='y', z='z', line_group='line_group',
                        color='color', **kwargs)
 
-    for f in fig.frames:
-        f.data[0].name = 'x'
+    for j, f in enumerate(fig.frames):
+        f.data[0].name = f'{j:02d}'
 
     for j, frame in enumerate(fig.frames):
-        frame['data'][0]['line']['color'] = df.iloc[j*2]['color']
+        frame['data'][0]['line']['color'] = df.iloc[j * 2]['color']
         frame['data'][0]['line']['width'] = 5
         frame['data'][1]['line']['color'] = 'black'
 
+    # Set legend name as time points
     for j, d in enumerate(fig_s.data):
-        d['line']['color'] = df.iloc[j*2]['color']
+        d['line']['color'] = df.iloc[j * 2]['color']
+        if j > 40:
+            d['line']['color'] = 'black'
+        d['name'] = f'{j:02d}'
 
     fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 20
 

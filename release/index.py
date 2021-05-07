@@ -358,6 +358,7 @@ def plot_trace(e, dd, vec=vec):
 
     for j, d in enumerate(fig.data):
         d['line']['color'] = df.iloc[j*2]['color']
+        d['name'] = j
 
     return fig, trace.df
 

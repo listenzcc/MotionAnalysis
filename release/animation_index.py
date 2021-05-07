@@ -356,12 +356,12 @@ def plot_trace(e, dd, vec=vec):
     fig = px.line_3d(df, x='x', y='y', z='z', line_group='line_group',
                      color='color', animation_frame='step', **kwargs)
 
-    for f in fig.frames:
-        f.data[0].name = 'x'
+    for j, f in enumerate(fig.frames):
+        f.data[0].name = f'x - {j:02d}'
 
     for j, frame in enumerate(fig.frames):
         frame['data'][0]['line']['color'] = df.iloc[j*2]['color']
-        frame['data'][0]['line']['width'] = 3
+        frame['data'][0]['line']['width'] = 5
         frame['data'][1]['line']['color'] = 'black'
 
     fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 20
@@ -480,13 +480,6 @@ app.layout = html.Div(
             ],
             style=style
         ),
-        # Button Container
-        html.Div(
-            [
-                html.Button('Forward', id='button-1', n_clicks=0)
-            ],
-            style=style
-        ),
     ]
 )
 
@@ -496,18 +489,14 @@ app.layout = html.Div(
     Output(component_id='graph-1', component_property='figure'),
     [
         Input(component_id='dropdown-1', component_property='value'),
-        Input(component_id='button-1', component_property='n_clicks'),
     ]
 )
-def update_graph1(name, n_clicks1):
+def update_graph1(name):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     print(f'D: Component: "{changed_id}" changed.')
 
     if changed_id.startswith('dropdown-1'):
         myfig.update_fig(name)
-
-    if changed_id.startswith('button-1'):
-        myfig.forward()
 
     return myfig.fig
 

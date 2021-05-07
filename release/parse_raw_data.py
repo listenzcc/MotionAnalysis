@@ -79,7 +79,7 @@ event_name = {
     "9-SA": 9,
 }
 
-raw_csv_name = '处理后的数据(200ms)(6个人).csv'
+raw_csv_name = '200ms数据.csv'
 
 # %%
 # Where the data will be read from and saved to.
