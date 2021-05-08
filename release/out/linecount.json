@@ -1,0 +1,53 @@
+{
+    "extension": "linecount",
+    "version": "0.1.7",
+    "workspace": "c:\\Users\\liste\\OneDrive\\Laptop\\MotionAnalysis\\release",
+    "linecount": [
+        {
+            "version": "0.1.7",
+            "counttime": "2021-05-07 16:46:34",
+            "filesum": 6,
+            "codesum": 759,
+            "commentsum": 803,
+            "blanksum": 333,
+            "filelist": [
+                {
+                    "blank": 91,
+                    "code": 204,
+                    "comment": 212,
+                    "filename": "animation_index.py"
+                },
+                {
+                    "blank": 89,
+                    "code": 186,
+                    "comment": 234,
+                    "filename": "index.py"
+                },
+                {
+                    "blank": 73,
+                    "code": 155,
+                    "comment": 199,
+                    "filename": "parse_motion.py"
+                },
+                {
+                    "blank": 40,
+                    "code": 102,
+                    "comment": 158,
+                    "filename": "parse_raw_data.py"
+                },
+                {
+                    "blank": 40,
+                    "code": 104,
+                    "comment": 0,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 0,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "requirements.txt"
+                }
+            ]
+        }
+    ]
+}

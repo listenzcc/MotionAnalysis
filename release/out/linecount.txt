@@ -1,0 +1,18 @@
+===============================================================================
+EXTENSION NAME : linecount
+EXTENSION VERSION : 0.1.7
+-------------------------------------------------------------------------------
+count time : 2021-05-07 16:46:34
+count workspace : c:\Users\liste\OneDrive\Laptop\MotionAnalysis\release
+total files : 6
+total code lines : 759
+total comment lines : 803
+total blank lines : 333
+
+animation_index.py, code is 204, comment is 212, blank is 91.
+index.py, code is 186, comment is 234, blank is 89.
+parse_motion.py, code is 155, comment is 199, blank is 73.
+parse_raw_data.py, code is 102, comment is 158, blank is 40.
+README.md, code is 104, comment is 0, blank is 40.
+requirements.txt, code is 8, comment is 0, blank is 0.
+===============================================================================
